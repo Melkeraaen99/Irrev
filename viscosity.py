@@ -42,7 +42,8 @@ for T in T_values:
         visc_data_id[T].append(visc_id)
 
 # Scaled viscosity
-dim_less_visc = np.log(np.array(visc_data[T])/visc_data_id[T])
+def dim_less_visc(T): 
+    return np.log(np.array(visc_data[T])/visc_data_id[T])
 
 # Create a new figure
 plt.figure(figsize=(8, 6))
@@ -55,7 +56,7 @@ plt.figure(figsize=(8, 6))
 # Plot calculated residual entropy with log scaled viscosity, try different scaling
 for T in T_values:
     label = f'Temperature {T} K (Ideal Gas)'
-    plt.plot(entropy_2[T], dim_less_visc, 'o', label=label)
+    plt.plot(entropy_2[T], dim_less_visc(T), 'o', label=label)
 
 # Add labels and a legend
 plt.xlabel(r'Residual entropy [J·mol$^{-1}$·K$^{-1}$]')
