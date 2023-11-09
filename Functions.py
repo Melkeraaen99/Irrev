@@ -36,7 +36,7 @@ def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_d
     plt.title(f'{property_name} (exp & calc) vs Pressure')
     plt.legend()
 
-    plt.savefig(f"Data/{property_name}.png")
+    plt.savefig(f"Plots/{property_name}.png")
 
 # Plotting calculated vs residual entropy 
 # Function only takes care of viscosity at the moment since dimless cond is not yet defined
@@ -55,4 +55,4 @@ def residual_plot(property_string):
 
     # Show the plot
     plt.grid(True)
-    plt.savefig(f"Data/{property_string}_resiudal.png")
+    plt.savefig(f"Plots/{property_string}_resiudal.png")
