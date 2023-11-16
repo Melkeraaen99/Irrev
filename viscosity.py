@@ -4,13 +4,7 @@ import Functions
 viscosity_200_exp = Initialization.df_200['Viscosity (Pa*s)'].to_numpy()
 viscosity_250_exp = Initialization.df_250['Viscosity (Pa*s)'].to_numpy()
 viscosity_300_exp = Initialization.df_300['Viscosity (Pa*s)'].to_numpy()
-visc_exp = [viscosity_200_exp, viscosity_250_exp, viscosity_300_exp]
-
-
-for T in Initialization.T_values:
-    for p in Initialization.pressure:
-        visc = Initialization.kin.viscosity_tp(T, p, Initialization.x, N=2)
-        Initialization.visc_data[T].append(visc)
+visc_exp = [viscosity_200_exp, viscosity_250_exp, viscosity_300_exp] 
 
 mean_diff_visc_200 = Functions.calculate_mean_percentage_difference(Initialization.visc_data[200], viscosity_200_exp)
 mean_diff_visc_250 = Functions.calculate_mean_percentage_difference(Initialization.visc_data[250], viscosity_250_exp)

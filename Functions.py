@@ -6,13 +6,22 @@ def calculate_mean_percentage_difference(data_calculated, data_exp):
     mean_percentage_difference = Initialization.np.mean(percentage_difference)
     return mean_percentage_difference
 
-# Log-scaled dimensionless viscosity
-def dim_less(T, property_data):
-    if T in Initialization.density:
-        return Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * (Initialization.kb * T* Initialization.m_Ar)**(-0.5) * Initialization.np.array(property_data))
-    else:
-        return None 
-    
+# Log-scaled dimensionless viscosity (Add some a or b scaling-values from article?)
+def dim_less_visc(T, visc_data):
+    return Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * (Initialization.kb * T* Initialization.m_Ar)**(-0.5) * Initialization.np.array(visc_data))
+
+'''# dimensionless conductivity, the Prandtl number: (heat capacity * viscosity) / thermal conductivity
+# cp_dict [J/(mol*K)]
+# visc_data [Pa*s] -> [kg/(m*s)]
+# cond_data [W/m*K] -> [J/(s*m*K)]
+def dim_less_cond(T, visc_data, cond_data):
+    dim_less_1 = ((Initialization.np.array(Initialization.cp_dict[T])*Initialization.np.array(visc_data)) / (Initialization.np.array(cond_data))) # kg/mol
+    dim_less_2 = dim_less_1 / Initialization.molar_mass_argon # dimless
+    return Initialization.np.log(dim_less_2)'''
+
+def dim_less_cond(T, cond_data):
+    return Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * ((Initialization.kb * T)/Initialization.m_Ar)**(-0.5) * Initialization.np.array(cond_data)/Initialization.kb)
+
 # Plotting function for experimental vs calculated
 def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_diff_calculated, temp, linestyle_calculated='-', linestyle_exp='--', marker_calculated='o', marker_exp='s', y_offset=0):
     plt.figure(figsize=(8, 6))
@@ -44,14 +53,26 @@ def residual_plot(property_string):
     plt.figure(figsize=(8, 6))
 
     for T in Initialization.T_values:
-        label = f'Temperature {T} K (Ideal Gas)'
-        plt.plot(Initialization.entropy[T], dim_less(T, Initialization.visc_data[T]), 'o', label=label) # Change visc_data here
+        label = f'Temperature {T}'
+        if property_string == "Viscosity":
+            plt.plot(Initialization.entropy[T], dim_less_visc(T, Initialization.visc_data[T]), 'o', label=label)
+        elif property_string == "Conductivity":
+            plt.plot(Initialization.entropy[T], dim_less_cond(T, Initialization.cond_data[T]), 'o', label=label)
+        else:
+            print("Invalid property string! \n Set property string to either Viscosity or Conductivity")
+            return None
 
-    # Add labels and a legend
-    plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
-    plt.ylabel(r'$\eta^*$')
-    plt.title(f'Dimensionless {property_string}' + r', $\eta^*$, plotted against residual entropy, S$_{res}$, for Argon')
-    plt.legend()
+    # Add labels correctly for viscosity and conductivity
+    if property_string == "Viscosity":
+        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.ylabel(r'$\eta^*$')
+        plt.title(f'Dimensionless {property_string}' + r', $\eta^*$, plotted against residual entropy, S$_{res}$, for Argon')
+        plt.legend()
+    else:
+        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.ylabel(r'$k^*$')
+        plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against residual entropy, S$_{res}$, for Argon')
+        plt.legend()
 
     # Show the plot
     plt.grid(True)
