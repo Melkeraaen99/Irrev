@@ -63,7 +63,7 @@ for T in T_values:
     for p in pressure:
         s_volume = eos.specific_volume(T, p, z, eos.VAPPH)
         spes_volume[T].append(s_volume[0])
-        density[T].append(1/s_volume[0])
+        density[T].append((1/s_volume[0])*Avogadro)
         entro = eos.entropy_tv(T, s_volume[0], z, property_flag='R') # Flag R to calculate residual entropy
         entropy[T].append(entro)
         _, Cp_vap = eos.enthalpy(T, p, x, eos.VAPPH, dhdt=True) # From thermopack documentation 

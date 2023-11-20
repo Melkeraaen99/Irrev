@@ -8,7 +8,7 @@ def calculate_mean_percentage_difference(data_calculated, data_exp):
 
 # Log-scaled dimensionless viscosity (Add some a or b scaling-values from article?)
 def dim_less_visc(T, visc_data):
-    return Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * (Initialization.kb * T* Initialization.m_Ar)**(-0.5) * Initialization.np.array(visc_data))
+    return Initialization.np.log((Initialization.np.array(Initialization.density[T]))**(-2/3) * (Initialization.kb * T* Initialization.m_Ar)**(-0.5) * Initialization.np.array(visc_data))
 
 '''# dimensionless conductivity, the Prandtl number: (heat capacity * viscosity) / thermal conductivity
 # cp_dict [J/(mol*K)]
@@ -20,7 +20,7 @@ def dim_less_cond(T, visc_data, cond_data):
     return Initialization.np.log(dim_less_2)'''
 
 def dim_less_cond(T, cond_data):
-    dim_less = Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * ((Initialization.kb * T)/Initialization.m_Ar)**(-0.5) * Initialization.np.array(cond_data)/Initialization.kb)
+    dim_less = Initialization.np.log((Initialization.np.array(Initialization.density[T]))**(-2/3) * ((Initialization.kb * T)/Initialization.m_Ar)**(-0.5) * Initialization.np.array(cond_data)/Initialization.kb)
     return dim_less #/T
 
 # Plotting function for experimental vs calculated
