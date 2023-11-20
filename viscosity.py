@@ -13,5 +13,6 @@ mean_diff_visc = [mean_diff_visc_200, mean_diff_visc_250, mean_diff_visc_300]
 
 # Initialize plots
 Functions.plot_and_annotate(Initialization.pressure, Initialization.visc_data, visc_exp, 'Viscosity', mean_diff_visc, Initialization.T_values, linestyle_calculated='-', linestyle_exp='--', marker_calculated='o', marker_exp='s', y_offset=0.1e-5)
-Functions.residual_plot("Viscosity")
+Functions.residual_plot("Viscosity", visc_exp)
+Functions.residual_plot("Viscosity_exp", visc_exp)
 

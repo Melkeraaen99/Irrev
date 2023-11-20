@@ -11,6 +11,10 @@ from scipy.constants import Avogadro
 eos = saftvrmie('AR') 
 kin = MieKinGas('AR', use_eos=eos)  # AR, modeled with RET-Mie
 
+'''print(f'sigma : {kin.sigma}')
+print(f'epsilon : {kin.epsilon}')
+print(f'mass : {kin.m}')'''
+
 # Define temperature and pressure ranges
 T_values = [200, 250, 300]  # Kelvin
 pressure_start = 1e5  # Pascal -> 1 bar

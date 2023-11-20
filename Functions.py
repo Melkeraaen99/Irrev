@@ -20,7 +20,8 @@ def dim_less_cond(T, visc_data, cond_data):
     return Initialization.np.log(dim_less_2)'''
 
 def dim_less_cond(T, cond_data):
-    return Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * ((Initialization.kb * T)/Initialization.m_Ar)**(-0.5) * Initialization.np.array(cond_data)/Initialization.kb)
+    dim_less = Initialization.np.log((Initialization.np.array(Initialization.density[T])*Initialization.Avogadro)**(-2/3) * ((Initialization.kb * T)/Initialization.m_Ar)**(-0.5) * Initialization.np.array(cond_data)/Initialization.kb)
+    return dim_less #/T
 
 # Plotting function for experimental vs calculated
 def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_diff_calculated, temp, linestyle_calculated='-', linestyle_exp='--', marker_calculated='o', marker_exp='s', y_offset=0):
@@ -49,18 +50,24 @@ def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_d
 
 # Plotting calculated vs residual entropy 
 # Function only takes care of viscosity at the moment since dimless cond is not yet defined
-def residual_plot(property_string):
+def residual_plot(property_string, data_exp):
     plt.figure(figsize=(8, 6))
 
+    i = 0
     for T in Initialization.T_values:
         label = f'Temperature {T}'
         if property_string == "Viscosity":
             plt.plot(Initialization.entropy[T], dim_less_visc(T, Initialization.visc_data[T]), 'o', label=label)
         elif property_string == "Conductivity":
             plt.plot(Initialization.entropy[T], dim_less_cond(T, Initialization.cond_data[T]), 'o', label=label)
+        elif property_string == "Viscosity_exp":
+            plt.plot(Initialization.entropy[T], dim_less_visc(T, Initialization.np.array(data_exp[i])), 'o', label=label)
+        elif property_string == "Conductivity_exp":
+            plt.plot(Initialization.entropy[T], dim_less_cond(T, Initialization.np.array(data_exp[i])), 'o', label=label)
         else:
             print("Invalid property string! \n Set property string to either Viscosity or Conductivity")
             return None
+        i += 1
 
     # Add labels correctly for viscosity and conductivity
     if property_string == "Viscosity":
@@ -68,7 +75,17 @@ def residual_plot(property_string):
         plt.ylabel(r'$\eta^*$')
         plt.title(f'Dimensionless {property_string}' + r', $\eta^*$, plotted against residual entropy, S$_{res}$, for Argon')
         plt.legend()
-    else:
+    elif property_string == "Conductivity":
+        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.ylabel(r'$k^*$')
+        plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against residual entropy, S$_{res}$, for Argon')
+        plt.legend()
+    elif property_string == "Viscosity_exp":
+        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.ylabel(r'$k^*$')
+        plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against residual entropy, S$_{res}$, for Argon')
+        plt.legend()
+    elif property_string == "Conductivity_exp":
         plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
         plt.ylabel(r'$k^*$')
         plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against residual entropy, S$_{res}$, for Argon')
