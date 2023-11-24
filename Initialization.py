@@ -15,18 +15,29 @@ kin = MieKinGas('AR', use_eos=eos)  # AR, modeled with RET-Mie
 print(f'epsilon : {kin.epsilon}')
 print(f'mass : {kin.m}')'''
 
+tc, vc, pc = eos.critical([1])
+
 # Define temperature and pressure ranges
-T_values = [200, 250, 300]  # Kelvin
+T_values = [1.05*tc, 1.1*tc, 1.15*tc]  # Kelvin
 pressure_start = 1e5  # Pascal -> 1 bar
-pressure_end = 100e5
-pressure_increment = 5e5
-pressure = np.arange(pressure_start, pressure_end + 1, pressure_increment)
+pressure_end = 10e5
+pressure = np.linspace(pressure_start, pressure_end, 20)
 x = [0.5, 0.5]  # Molar composition used for conductivity and viscosity in pykingas ()
 z = [1]
 m_Ar = 39.948*1.67377e-27 # kg
 molar_mass_argon = 39.948e-3 # kg/mol
 kb = Boltzmann # J/K
 
+'''# Experimental data for viscosity and conductivity
+df_200 = pd.read_csv('Data/nist_data_200.csv', delimiter='\t')
+df_250 = pd.read_csv('Data/nist_data_250.csv', delimiter='\t')
+df_300 = pd.read_csv('Data/nist_data_300.csv', delimiter='\t')
+
+# Experimental heat capacity
+cp_200_exp = df_200['Cp (J/mol*K)'].to_numpy()
+cp_250_exp = df_250['Cp (J/mol*K)'].to_numpy()
+cp_300_exp = df_300['Cp (J/mol*K)'].to_numpy()
+cp_exp = [cp_200_exp, cp_250_exp, cp_300_exp] # [J/mol*K]'''
 
 # Experimental data for viscosity and conductivity
 df_200 = pd.read_csv('Data/nist_data_200.csv', delimiter='\t')
