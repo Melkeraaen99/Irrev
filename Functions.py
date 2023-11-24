@@ -49,7 +49,7 @@ def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_d
     plt.title(f'{property_name} (exp & calc) vs Pressure')
     plt.legend()
 
-    plt.savefig(f"Plots/{property_name}.png")
+    plt.savefig(f"Plots/Calc_VS_Exp_{property_name}.png")
 
 # Plotting calculated vs residual entropy 
 # Function only takes care of viscosity at the moment since dimless cond is not yet defined
@@ -74,26 +74,26 @@ def residual_plot(property_string, data_exp):
 
     # Add labels correctly for viscosity and conductivity
     if property_string == "Viscosity":
-        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.xlabel(r'S$_{res}^*\,$') # put in this if not dimless res entro: [ J$\tcdo$mol$^{-1}\cdot$K$^{-1}$] 
         plt.ylabel(r'$\eta^*$')
-        plt.title(f'Dimensionless {property_string}' + r', $\eta^*$, plotted against dimensionless residual entropy, S$_{res}^*$, for Argon')
+        plt.title(f'Dimensionless {property_string}' + r' plotted against dimensionless residual entropy for Argon')
         plt.legend()
     elif property_string == "Conductivity":
-        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.xlabel(r'S$_{res}^*\,$')
         plt.ylabel(r'$k^*$')
-        plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against dimensionless residual entropy, S$_{res}^*$, for Argon')
+        plt.title(f'Dimensionless {property_string}' + r' plotted against dimensionless residual entropy for Argon')
         plt.legend()
     elif property_string == "Viscosity_exp":
-        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.xlabel(r'S$_{res}^*\,$')
         plt.ylabel(r'$k^*$')
-        plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against dimensionless residual entropy, S$_{res}^*$, for Argon')
+        plt.title(f'Dimensionless {property_string}' + r' plotted against dimensionless residual entropy for Argon')
         plt.legend()
     elif property_string == "Conductivity_exp":
-        plt.xlabel(r'S$_{res}\,$ [ J$\cdot$mol$^{-1}\cdot$K$^{-1}$]')
+        plt.xlabel(r'S$_{res}^*\,$')
         plt.ylabel(r'$k^*$')
-        plt.title(f'Dimensionless {property_string}' + r', $k^*$, plotted against dimensionless residual entropy, S$_{res}^*$, for Argon')
+        plt.title(f'Dimensionless {property_string}' + r' plotted against dimensionless residual entropy for Argon')
         plt.legend()
 
     # Show the plot
     plt.grid(True)
-    plt.savefig(f"Plots/{property_string}_resiudal.png")
+    plt.savefig(f"Plots/{property_string}_residual.png")

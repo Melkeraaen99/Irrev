@@ -17,5 +17,5 @@ print(Initialization.cp_exp)'''
 
 # Thermal conductivity
 Functions.plot_and_annotate(Initialization.pressure, Initialization.cond_data, cond_exp, 'Conductivity', mean_diff_cond, Initialization.T_values, linestyle_calculated='-', linestyle_exp='--', marker_calculated='o', marker_exp='s', y_offset=0.0001)
-Functions.residual_plot("Conductivity", cond_exp)
+Functions.residual_plot("Conductivity", Initialization.cond_data)
 Functions.residual_plot("Conductivity_exp", cond_exp)
