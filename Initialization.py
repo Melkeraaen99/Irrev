@@ -9,6 +9,7 @@ from scipy.constants import Avogadro
 
 # Create a MieKinGas instance
 eos = saftvrmie('AR') 
+kin_id = MieKinGas('AR', is_idealgas=True)
 kin = MieKinGas('AR', use_eos=eos)  # AR, modeled with RET-Mie
 
 '''print(f'sigma : {kin.sigma}')
@@ -20,7 +21,7 @@ tc, vc, pc = eos.critical([1])
 # Define temperature and pressure ranges
 T_values = [1.05*tc, 1.1*tc, 1.15*tc]  # Kelvin
 pressure_start = 1e5  # Pascal -> 1 bar
-pressure_end = 10e5
+pressure_end = 50e5
 pressure = np.linspace(pressure_start, pressure_end, 20)
 x = [0.5, 0.5]  # Molar composition used for conductivity and viscosity in pykingas ()
 z = [1]
@@ -64,6 +65,8 @@ visc_data = {T: [] for T in T_values} # [Pa*s]
 
 # Store Residual entropy with thermopack in entropy list
 entropy = {T: [] for T in T_values}
+entropy_id = {T: [] for T in T_values}
+residual_entropy_exp = {T: [] for T in T_values}
 
 # Density
 density = {T: [] for T in T_values}
@@ -82,7 +85,10 @@ for T in T_values:
         spes_volume[T].append(s_volume[0])
         density[T].append((1/s_volume[0])*Avogadro)
         entro = eos.entropy_tv(T, s_volume[0], z, property_flag='R') # Flag R to calculate residual entropy
+        j = eos.getcompindex('AR')
+        entro_id = eos.idealentropysingle(T, p, j)
         entropy[T].append(entro)
+        entropy_id[T].append(entro_id)
         _, Cp_vap = eos.enthalpy(T, p, x, eos.VAPPH, dhdt=True) # From thermopack documentation 
         cp_dict[T].append(Cp_vap)
 
@@ -94,3 +100,5 @@ for T in T_values:
         cond = kin.thermal_conductivity(T, spes_volume[T][i], x, N=2)
         cond_data[T].append(cond)
         i+=1
+
+## Her må vi beregne residual entropy for experimental data

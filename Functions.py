@@ -35,7 +35,8 @@ def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_d
     for i, T in enumerate(temp):
         color = colors[i]
         plt.plot(pressure/1e5, data_calculated[T], linestyle=linestyle_calculated, marker=marker_calculated, color=color, label=f'{property_name} thermopack at {T:.2f} K')
-        plt.text(pressure[15]/1e5, data_calculated[T][0] - y_offset, f' Mean Diff: {mean_diff_calculated[i]:.2f}%', color='k')
+        plt.text(pressure[15]/1e5, data_calculated[T][0] - y_offset, f' Mean Diff: ', color=color)
+        plt.text(pressure[15]/1e5 + 7 , data_calculated[T][0] - y_offset, f'{mean_diff_calculated[i]:.2f}%', color='k')
         i += 1
 
     i = 0
@@ -46,7 +47,7 @@ def plot_and_annotate(pressure, data_calculated, data_exp, property_name, mean_d
 
     plt.xlabel('Pressure (bar)')
     plt.ylabel(f'{property_name}')
-    plt.title(f'{property_name} (exp & calc) vs Pressure')
+    plt.title(f'{property_name} vs Pressure')
     plt.legend()
 
     plt.savefig(f"Plots/Calc_VS_Exp_{property_name}.png")
@@ -58,7 +59,7 @@ def residual_plot(property_string, data_exp):
 
     i = 0
     for T in Initialization.T_values:
-        label = f'Temperature {T}'
+        label = f'Temperature {T:.2f} K'
         if property_string == "Viscosity":
             plt.plot(1/dim_less_entropy(Initialization.entropy[T]), dim_less_visc(T, Initialization.visc_data[T]), 'o', label=label)
         elif property_string == "Conductivity":
@@ -66,7 +67,7 @@ def residual_plot(property_string, data_exp):
         elif property_string == "Viscosity_exp":
             plt.plot(1/dim_less_entropy(Initialization.entro_exp[i]), dim_less_visc(T, Initialization.np.array(data_exp[i])), 'o', label=label)
         elif property_string == "Conductivity_exp":
-            plt.plot(dim_less_entropy(Initialization.entro_exp[i]), dim_less_cond(T, Initialization.np.array(data_exp[i])), 'o', label=label)
+            plt.plot(1/dim_less_entropy(Initialization.entro_exp[i]), dim_less_cond(T, Initialization.np.array(data_exp[i])), 'o', label=label)
         else:
             print("Invalid property string! \n Set property string to either Viscosity or Conductivity")
             return None
